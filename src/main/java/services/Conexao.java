@@ -14,7 +14,7 @@ public abstract class Conexao {
     public PreparedStatement pst;
 
     static final String user = "root";
-    static final String password = "root";
+    static final String password = "lgdc2000";
     static final String database = "mydb";
 
     static final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false";
