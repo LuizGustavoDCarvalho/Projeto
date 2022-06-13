@@ -8,19 +8,19 @@ import java.sql.*;
 
 public abstract class Conexao {
 
-    public Connection connection;
+    public static Connection connection;
     public Statement statement;
     public ResultSet result;
-    public PreparedStatement pst;
+    public static PreparedStatement pst;
 
     static final String user = "root";
     static final String password = "lgdc2000";
     static final String database = "mydb";
 
     static final String url = "jdbc:mysql://localhost:3306/" + database + "?useTimezone=true&serverTimezone=UTC&useSSL=false";
-    public boolean check = false;
+    public static boolean check = false;
 
-    public void connect(){
+    public static void connect(){
         try{
             connection = DriverManager.getConnection(url,user,password);
             System.out.println("Conexão feita com sucesso: " + connection);

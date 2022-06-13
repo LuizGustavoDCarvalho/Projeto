@@ -12,19 +12,18 @@ public class EmpresaDB extends Conexao {
 
     //Inserção das empresa no DB
     //-Alterar o x = 1 por endereco, quando tiver endereco
-    // C - Create
     public boolean insertEmpresa(Empresa empresa) {
         connect();
         String sql = "INSERT INTO " +
-                "empresa(nome_empresa,cnpj_empresa,categoria_empresa,numeroColaboradores_empresa,Endereco_id_endereco) " +
-                "VALUES (?,?,?,?,?)";
+                "empresa(nome_empresa,cnpj_empresa,categoria_empresa,numeroColaboradores_empresa) " +
+                "VALUES (?,?,?,?)";
         try {
             pst = connection.prepareStatement(sql);
             pst.setString(1, empresa.getNomeEmpresa());
             pst.setString(2, empresa.getCnpjEmpresa());
             pst.setString(3, empresa.getCategoriaEmpresa());
             pst.setInt(4, empresa.getNumeroColaboradoresEmpresa());
-            pst.setInt(5,1 );
+            //pst.setInt(5,empresa. );
             pst.execute();
             check = true;
         } catch (SQLException e) {
@@ -116,16 +115,6 @@ public class EmpresaDB extends Conexao {
         }
         return empresas;
     }
-//    updateFkEmpresa(1, 'categoria_empresa', 'tech');
-//    updateFkEmpresa(1, 'nome_empresa', 'ronaldo');
-//    updateFkEmpresa(1, 'numeroColaboradores_empresa', '50');
-
-    // string categoria = cin()
-    // switch(categoria)
-    // 'nome':
-    //      string nome = cin()
-    //      updateFkEmpresa(1, 'categoria_empresa', nome);
-    //      break;
 
     //Editando empresas no DB
     public boolean updateFkEmpresa(int idEmpresa, String atributo, String novoValor ){
@@ -159,8 +148,29 @@ public class EmpresaDB extends Conexao {
         return check;
     }
 
-    public boolean deleteFkEmpresa(int idEmpresa){
-
+    //Deletando empresas no DB
+    public boolean deleteEmpresa(int idEmpresa){
+        connect();
+        String sql = "DELETE FROM empresa WHERE id_empresa=?";
+        try{
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1,idEmpresa);
+            pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+            check = false;
+        }
+        finally {
+            try{
+                connection.close();
+                pst.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return check;
     }
 }
 
