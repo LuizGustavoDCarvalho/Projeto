@@ -39,7 +39,7 @@ public class TecnicoDB extends Conexao {
     }
 
     //Pesquisar por tecnicos no DB
-    public ArrayList<Tecnico> researchTecnico(Tecnico tecnico){
+    public ArrayList<Tecnico> researchTecnicos(int idTecnico){
         connect();
         ArrayList<Tecnico> tecnicos = new ArrayList<>();
         String sql = "SELECT * from tecnico";
@@ -49,19 +49,21 @@ public class TecnicoDB extends Conexao {
             result = statement.executeQuery(sql);
 
             while(result.next()){
-                Tecnico tecnicoTemp = new Tecnico(
-                        result.getString("nome_tecnico"),
-                        result.getString("cpf_tecnico"),
-                        result.getDouble("avaliacao_tecnico")
+                if(idTecnico == result.getInt("id_tecnico")) {
+                    Tecnico tecnicoTemp = new Tecnico(
+                            result.getString("nome_tecnico"),
+                            result.getString("cpf_tecnico"),
+                            result.getDouble("avaliacao_tecnico")
 
-                );
-
-                System.out.println("Código do tecnico = " + result.getInt("id_tecnico"));//do banco
-                System.out.println("Nome da tecnico = " + tecnicoTemp.getNomeTecnico());//do objeto
-                System.out.println("CPF do tecnico = " + tecnicoTemp.getCpfTecnico());
-                System.out.println("Avaliação do tecnico = " + tecnicoTemp.getAvaliacaoTecnico());
-                System.out.println("-------------------------------");
-                tecnicos.add(tecnicoTemp);
+                    );
+                    System.out.println("-------------------------------");
+                    System.out.println("Código do tecnico = " + result.getInt("id_tecnico"));//do banco
+                    System.out.println("Nome da tecnico = " + tecnicoTemp.getNomeTecnico());//do objeto
+                    System.out.println("CPF do tecnico = " + tecnicoTemp.getCpfTecnico());
+                    System.out.println("Avaliação do tecnico = " + tecnicoTemp.getAvaliacaoTecnico());
+                    System.out.println("-------------------------------");
+                    tecnicos.add(tecnicoTemp);
+                }
             }
         }catch(SQLException e){
             System.out.println("Erro de operação: " + e.getMessage());
@@ -78,6 +80,7 @@ public class TecnicoDB extends Conexao {
         }
         return tecnicos;
     }
+
 
     //Função para mostrar o menu somente com opções de nome e código do tecnico
     public ArrayList<Tecnico> researchTecnicoIds(Tecnico tecnico){
@@ -169,4 +172,44 @@ public class TecnicoDB extends Conexao {
         }
         return check;
     }
+
+    //Procurar tecnico pelo ID
+    public boolean researchTecnico(int idTecnico){
+        connect();
+        String sql = "SELECT *FROM tecnico WHERE id_tecnico=?";
+        try{
+            statement = connection.createStatement();
+            result = statement.executeQuery(sql);
+
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1,idTecnico);
+            pst.execute();
+
+
+            while(result.next()){
+
+
+                System.out.println("Código do tecnico = " + result.getInt("id_tecnico"));
+                System.out.println("Nome do tecnico = " + result.getString("nome_tecnico"));
+                System.out.println("-------------------------------");
+
+            }
+
+        }catch (SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+            check = false;
+        }
+        finally {
+            try{
+                connection.close();
+                pst.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return check;
+    }
+
+
 }

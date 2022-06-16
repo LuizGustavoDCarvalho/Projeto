@@ -1,6 +1,7 @@
 package Database;
 
 import Classes.Servicos;
+import Classes.Tecnico;
 import services.Conexao;
 
 import java.sql.SQLException;
@@ -10,17 +11,20 @@ import static java.lang.Integer.parseInt;
 
 public class ServicosDB extends Conexao {
 
+
     //Inserção dos serviços no DB
-    public static boolean insertServico(Servicos servico) {
+    public static boolean insertServico(Servicos servico, int id_Empresa) {
         connect();
         String sql = "INSERT INTO " +
-                "serviços(descricao_servico,data_servico,hora_servico) " +
-                "VALUES (?,?,?)";
+                "serviços(descricao_servico,data_servico,hora_servico, Empresa_id_empresa, Tecnico_id_tecnico) " +
+                "VALUES (?,?,?,?,?)";
         try {
             pst = connection.prepareStatement(sql);
             pst.setString(1, servico.getDescricao_servico());
             pst.setString(2, servico.getData());
             pst.setString(3, servico.getHora());
+            pst.setInt(4, id_Empresa);
+            pst.setNull(5,1);
 
             pst.execute();
             check = true;
@@ -133,5 +137,42 @@ public class ServicosDB extends Conexao {
         return check;
     }
 
+//    //Função para se candidatar em serviço
+//    public void candidataServico(Servicos servicos, int auxVaga){
+//        ArrayList<Servicos> servicosConfirmados = new ArrayList<>();
+//        connect();
+//        String sql = "INSERT INTO " +
+//                "serviços(descricao_servico,data_servico,hora_servico) " +
+//                "VALUES (?,?,?)";
+//
+//        try{
+//            statement = connection.createStatement();
+//            result = statement.executeQuery(sql);
+//            pst = connection.prepareStatement(sql);
+//
+//            while(result.next()){
+//                if(auxVaga == result.getInt("numero_serviços")) {
+//
+//                    Servicos servicoTemp = new Servicos(
+//                    pst.setString(1, servicos.getDescricao_servico());
+//                    pst.setString(2, servicos.getData());
+//                    pst.setString(3, servicos.getHora());
+//
+//                    pst.execute();
+//                    check = true;
+//
+//                    System.out.println("-------------------------------");
+//                    System.out.println("Chamado confirmado!");
+//                    System.out.println("Código do tecnico = " + result.getInt("numero_serviços"));//do banco
+//                    System.out.println("Descrição do chamado = " + servicoTemp.getDescricao_servico());//do objeto
+//                    System.out.println("Data do chamado = " + servicoTemp.getData());
+//                    System.out.println("Horário do chamado = " + servicoTemp.getHora());
+//                    System.out.println("-------------------------------");
+//                }
+//            }
+//        }catch(SQLException e){
+//            System.out.println("Erro de operação: " + e.getMessage());
+//        }
+//    }
 
 }

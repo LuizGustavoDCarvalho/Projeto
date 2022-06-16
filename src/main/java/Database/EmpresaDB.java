@@ -12,18 +12,18 @@ public class EmpresaDB extends Conexao {
 
     //Inserção das empresa no DB
     //-Alterar o x = 1 por endereco, quando tiver endereco
-    public boolean insertEmpresa(Empresa empresa) {
+    public boolean insertEmpresa(Empresa empresa, int id_Endereco) {
         connect();
         String sql = "INSERT INTO " +
-                "empresa(nome_empresa,cnpj_empresa,categoria_empresa,numeroColaboradores_empresa) " +
-                "VALUES (?,?,?,?)";
+                "empresa(nome_empresa,cnpj_empresa,categoria_empresa,numeroColaboradores_empresa, Endereco_id_endereco) " +
+                "VALUES (?,?,?,?,?)";
         try {
             pst = connection.prepareStatement(sql);
             pst.setString(1, empresa.getNomeEmpresa());
             pst.setString(2, empresa.getCnpjEmpresa());
             pst.setString(3, empresa.getCategoriaEmpresa());
             pst.setInt(4, empresa.getNumeroColaboradoresEmpresa());
-            //pst.setInt(5,empresa. );
+            pst.setInt(5, id_Endereco );
             pst.execute();
             check = true;
         } catch (SQLException e) {
@@ -41,7 +41,7 @@ public class EmpresaDB extends Conexao {
     }
 
     //Pesquisar por empresas no DB
-    public ArrayList<Empresa> researchEmpresa(){
+    public ArrayList<Empresa> researchEmpresa(int idEmpresa){
         connect();
         ArrayList<Empresa> empresas = new ArrayList<>();
         String sql = "SELECT * from empresa";
@@ -51,21 +51,26 @@ public class EmpresaDB extends Conexao {
                 result = statement.executeQuery(sql);
 
                 while(result.next()){
+                    if(idEmpresa == result.getInt("id_empresa")) {
                     Empresa empresaTemp = new Empresa(
                             result.getString("nome_empresa"),//vem do banco
                             result.getString("cnpj_empresa"),
                             result.getString("categoria_empresa"),
-                            result.getInt("numeroColaboradores_empresa")
-                    );
+                            result.getInt("numeroColaboradores_empresa"));
 
-                    System.out.println("Código da empresa = " + result.getInt("id_empresa"));//do banco
-                    System.out.println("Nome da empresa = " + empresaTemp.getNomeEmpresa());//do objeto
-                    System.out.println("CNPJ da empresa = " + empresaTemp.getCnpjEmpresa());
-                    System.out.println("Categoria = " + empresaTemp.getCategoriaEmpresa());
-                    System.out.println("Número de funcionários = " + empresaTemp.getNumeroColaboradoresEmpresa());
-                    System.out.println("-------------------------------");
-                    empresas.add(empresaTemp);
+                        System.out.println("Código da empresa = " + result.getInt("id_empresa"));//do banco
+                        System.out.println("Nome da empresa = " + empresaTemp.getNomeEmpresa());//do objeto
+                        System.out.println("CNPJ da empresa = " + empresaTemp.getCnpjEmpresa());
+                        System.out.println("Categoria = " + empresaTemp.getCategoriaEmpresa());
+                        System.out.println("Número de funcionários = " + empresaTemp.getNumeroColaboradoresEmpresa());
+                        System.out.println("-------------------------------");
+                        empresas.add(empresaTemp);
+                    }
                 }
+
+
+
+
             }catch(SQLException e){
                 System.out.println("Erro de operação: " + e.getMessage());
             }

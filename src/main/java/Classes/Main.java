@@ -10,71 +10,199 @@ public class Main {
 
     public static void main(String[] args) {
 
-        //Teste CRUD  de empresa. Status: ok
-        Empresa empresa = new Empresa(
-                "gigabyte",
-                "4545641550231321",
-                "eletronico",
-                5
-        );
+        Scanner sc = new Scanner(System.in);
 
+        //Variáveis auxiliares e atributivas
+        String auxNome;
+        String tipoUsuario;
+        int auxUsuario = 0;
+        int idTecnico;
+        int auxVaga;
+        String auxProblema;
+        String auxHora;
+        String auxData;
+
+        String nomeCertificacao;
+        String descricaoCertificacao;
+        int qtdHorasCertificacao;
+
+        String nomeTecnico;
+        String cpfTecnico;
+
+        String nomeEmpresa;
+        String cnpjEmpresa;
+
+
+        TecnicoDB tecnicoDB = new TecnicoDB();
+        TecnicoDB tecnicoDB2 = new TecnicoDB();
+        ServicosDB servicosDB = new ServicosDB();
         EmpresaDB empresaDB = new EmpresaDB();
 
-        //empresaDB.insertEmpresa(empresa);
-        //empresaDB.researchEmpresaIds();
-        //System.out.println("Digite o numero da empresa que quer deletar");
-        // empresaDB.updateFkEmpresa(1, "numeroColaboradores_empresa", "15000");
-        // empresaDB.delete(1);
+
+        //Introdução do programa
+        System.out.println("Digite seu nome ou nome do seu negócio:");
+        auxNome = sc.nextLine();
+        System.out.println("Você representa uma 'empresa' ou um você é 'tecnico'?");
+        tipoUsuario = sc.nextLine();
+
+        //Direcionamento do tecnico para suas opções
+        if (tipoUsuario.equals("tecnico")){
+            System.out.println("---------------------------");
+            System.out.println("1 - Entrar");
+            System.out.println("2 - Quero me cadastrar");
+            System.out.println("---------------------------");
+            auxUsuario = sc.nextInt();
+
+            switch(auxUsuario){
+                //Opção de entrar na conta/tecnico
+                case 1:
+                    System.out.println("-------------------------------------");
+                    System.out.println("Seja bem vindo, " + auxNome);
+                    System.out.println("1 - Visualizar perfil");
+                    System.out.println("2 - Buscar por chamados novos");
+                    System.out.println("3 - Visualizar chamados  marcados");
+                    System.out.println("4 - Adicionar certificação");
+                    System.out.println("-------------------------------------");
+                    auxUsuario = sc.nextInt();
+                    sc.nextLine();
+
+                    switch(auxUsuario) {
+
+                        //1-Visualizar perfil
+                        case 1:
+                            System.out.println("---------------------------");
+                            System.out.println("Qual o seu ID?");
+                            System.out.println("---------------------------");
+                            idTecnico = sc.nextInt();
+                            tecnicoDB.researchTecnicos(idTecnico);
+                            //**como voltar para o menu quando a dunção é finalizada?
+                        break;
+
+                        //2-Buscar por chamados novos
+                        case 2:
+                            System.out.println("------/ Lista de chamados /----------");
+                            servicosDB.researchServico();
+                            System.out.println("Deseja se candidatar para qual vaga?");
+                            auxVaga = sc.nextInt();
+                            //**inserir no candidataservico
 
 
-        //Testando CRUD de tecnicos. Status: ok
-        Tecnico tecnico = new Tecnico("Estagiario","116.121.356-25",5.0);
-        TecnicoDB tecnicoDB = new TecnicoDB();
-        //tecnicoDB.insertTecnico(tecnico);
-        //tecnicoDB.researchTecnico(tecnico);
-        //tecnicoDB.researchTecnicoIds(tecnico);
-        //tecnicoDB.updateFkTecnico(1,"nome_tecnico", "Jorgim");
-        //tecnicoDB.deleteTecnico(3);
+                        break;
+
+                        //3-Visualizar chamados marcados
+                        case 3:
+                            System.out.println("------/ Chamados marcados /----------");
+                            //** Mostrar a lista de chamados confirmados
 
 
-        //Testando CRUD de endereços. Status: ok
-        Endereco endereco = new Endereco("Minas Gerais","Pouso Alegre","Recanto dos Fernandes","Rosa F. Barreiro","154","Bloco 2");
-        EnderecoDB enderecoDB = new EnderecoDB();
-        //enderecoDB.insertEndereco(endereco);
-        //enderecoDB.researchEndereco(endereco);
+                            System.out.println("-------------------------------------");
+                            break;
+
+                            //4-Adicionar certificação
+                        case 4:
+                            sc.nextLine();
+                            System.out.println("-------------------------------------");
+                            System.out.println("Digite o nome da certificação");
+                            nomeCertificacao = sc.nextLine();
+                            System.out.println("Digite a descrição da certificação");
+                            descricaoCertificacao = sc.nextLine();
+                            System.out.println("Digite a quantidade de horas do curso");
+                            qtdHorasCertificacao = sc.nextInt();
+                            System.out.println("-------------------------------------");
+                            break;
+
+                    }
+                    break;
+
+                //Opção de cadastrar/tecnico
+                case 2:
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("Digite seu nome completo");
+                    nomeTecnico = sc.nextLine();
+                    System.out.println("Digite seu CPF (incluir pontos e traços)");
+                    cpfTecnico = sc.nextLine();
+                    System.out.println("-------------------------------------------------");
+            }
+        }
 
 
-        //Teste CRUD  de Serviços. Status: ok
-        Servicos servico = new Servicos(
-                "Formatação e instalção de SSD",
-                "04/10/2022",
-                "13:45"
-        );
-        ServicosDB servicoDB = new ServicosDB();
-        ServicosDB.insertServico(servico);
-        //empresaDB.researchEmpresaIds();
-        //System.out.println("Digite o numero da empresa que quer deletar");
-        // empresaDB.updateFkEmpresa(1, "numeroColaboradores_empresa", "15000");
-        // empresaDB.delete(1);
+        //Direcionamento da empresa para as sua opções
+        else if (tipoUsuario.equals("empresa")) {
+            System.out.println("---------------------------");
+            System.out.println("1 - Entrar");
+            System.out.println("2 - Quero me cadastrar");
+            System.out.println("---------------------------");
+            auxUsuario = sc.nextInt();
 
 
-        //Testando CRUD de capacitacoes. Status: ok
-        Capacitacoes capacitacao= new Capacitacoes("Programador de java","Curso de programação",80);
-        CapacitacoesDB capacitacoesDB = new CapacitacoesDB();
-        enderecoDB.insertEndereco(endereco);
-        //enderecoDB.researchEndereco(endereco);
+            switch(auxUsuario){
+
+                //Opção de entrar na conta/empresa
+                case 1:
+                    System.out.println("-------------------------------------");
+                    System.out.println("Seja bem vindo, " + auxNome);
+                    System.out.println("1 - Abrir chamado");
+                    System.out.println("2 - Chamados abertos");
+                    System.out.println("3 - Visualizar perfil");
+                    System.out.println("-------------------------------------");
+                    auxUsuario = sc.nextInt();
+                    sc.nextLine();
+
+                    switch(auxUsuario){
+
+                        case 1:
+                            System.out.println("-------------------------------------");
+                            System.out.println("Descreva seu problema: ");
+                            auxProblema = sc.nextLine();
+                            System.out.println("1 - Qual data?");
+                            auxData = sc.nextLine();
+                            System.out.println("2 - Qual horário?");
+                            auxHora = sc.nextLine();
+                            System.out.println("3 - Pedido de chamado confirmado!");
+                            System.out.println("-------------------------------------");
 
 
+                           // servicosDB.insertServico();
+                            // **Inserir chamado na lista de servico
 
+                        break;
 
+                        case 2:
+                            System.out.println("------/ Lista de chamados /----------");
+                            servicosDB.researchServico();
 
+                            break;
 
-        //Lógica de entrada de dados(Rascunho):
-        // string categoria = cin()
-        // switch(categoria)
-        // 'nome':
-        //      string nome = cin()
-        //      updateFkEmpresa(1, 'categoria_empresa', nome);
-        //      break;
+                        case 3:
+                            System.out.println("---------------------------");
+                            System.out.println("Qual o seu ID?");
+                            System.out.println("---------------------------");
+                            int idEmpresa = sc.nextInt();
+                            empresaDB.researchEmpresa(idEmpresa);
+
+                        break;
+                    }
+                 break;
+
+                //Opção de cadastrar/ empresa
+                case 2:
+                    System.out.println("-------------------------------------------------");
+                    System.out.println("Digite o nome da empresa");
+                    nomeEmpresa = sc.nextLine();
+                    System.out.println("Digite o CNPJ (incluir pontos e traços)");
+                    cnpjEmpresa = sc.nextLine();
+                    System.out.println("Digite a categoria da empresa");
+                    String categoriaEmpresa = sc.nextLine();
+                    System.out.println("Digite o número de funcionários da empresa");
+                    String numeroColaboradoresEmpresa = sc.nextLine();
+                    System.out.println("-------------------------------------------------");
+
+                 break;
+            }
+        }
+
+        //Em caso de nome inválido
+        else
+            System.out.println("Nome inválido");
     }
 }
