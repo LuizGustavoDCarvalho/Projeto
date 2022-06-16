@@ -137,42 +137,112 @@ public class ServicosDB extends Conexao {
         return check;
     }
 
-//    //Função para se candidatar em serviço
-//    public void candidataServico(Servicos servicos, int auxVaga){
-//        ArrayList<Servicos> servicosConfirmados = new ArrayList<>();
-//        connect();
-//        String sql = "INSERT INTO " +
-//                "serviços(descricao_servico,data_servico,hora_servico) " +
-//                "VALUES (?,?,?)";
-//
-//        try{
-//            statement = connection.createStatement();
-//            result = statement.executeQuery(sql);
-//            pst = connection.prepareStatement(sql);
-//
-//            while(result.next()){
-//                if(auxVaga == result.getInt("numero_serviços")) {
-//
-//                    Servicos servicoTemp = new Servicos(
-//                    pst.setString(1, servicos.getDescricao_servico());
-//                    pst.setString(2, servicos.getData());
-//                    pst.setString(3, servicos.getHora());
-//
-//                    pst.execute();
-//                    check = true;
-//
-//                    System.out.println("-------------------------------");
-//                    System.out.println("Chamado confirmado!");
-//                    System.out.println("Código do tecnico = " + result.getInt("numero_serviços"));//do banco
-//                    System.out.println("Descrição do chamado = " + servicoTemp.getDescricao_servico());//do objeto
-//                    System.out.println("Data do chamado = " + servicoTemp.getData());
-//                    System.out.println("Horário do chamado = " + servicoTemp.getHora());
-//                    System.out.println("-------------------------------");
-//                }
-//            }
-//        }catch(SQLException e){
-//            System.out.println("Erro de operação: " + e.getMessage());
-//        }
-//    }
+    //Candidatando o  tecnico para o serviço
+    public boolean candidataServico(int numero_servico, int id_tecnico){
+        connect();
+        String sql = "UPDATE Serviços SET Tecnico_id_tecnico=? WHERE numero_serviços=?";
 
+        try{
+            pst = connection.prepareStatement(sql);
+            pst.setInt(1, id_tecnico);
+            pst.setInt(2, numero_servico);
+            pst.execute();
+            check = true;
+        }catch (SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+            check = false;
+        }
+        finally {
+            try{
+                connection.close();
+                pst.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return check;
+    }
+
+    //Procurando pela lista de serviços confirmados
+    public ArrayList<Servicos> researchServicoConfirmado(int idTecnico){
+        connect();
+        ArrayList<Servicos> servicos = new ArrayList<>();
+        String sql = "SELECT * from Serviços WHERE Tecnico_id_tecnico=" + idTecnico;
+
+        try{
+
+            statement = connection.createStatement();
+            result = statement.executeQuery(sql);
+            while(result.next()){
+                Servicos servicoTemp = new Servicos(
+                        result.getString("descricao_servico"),//vem do banco
+                        result.getString("data_servico"),
+                        result.getString("hora_servico")
+                );
+
+                System.out.println("Número do atendimento: " + result.getInt("numero_serviços"));//do banco
+                System.out.println("Descrição do trabalho: " + servicoTemp.getDescricao_servico());//do objeto
+                System.out.println("Data: " + servicoTemp.getData());
+                System.out.println("Horário: " + servicoTemp.getHora());
+
+                System.out.println("-------------------------------");
+                servicos.add(servicoTemp);
+            }
+        }catch(SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+        }
+        finally {
+            try{
+                connection.close();
+                statement.close();
+                result.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return servicos;
+    }
+
+    //Procurando pela lista de chamados confirmados
+    public ArrayList<Servicos> researchChamadosConfirmado(int idEmpresa){
+        connect();
+        ArrayList<Servicos> servicos = new ArrayList<>();
+        String sql = "SELECT * from Serviços WHERE Empresa_id_empresa=" + idEmpresa;
+
+        try{
+
+            statement = connection.createStatement();
+            result = statement.executeQuery(sql);
+            while(result.next()){
+                Servicos servicoTemp = new Servicos(
+                        result.getString("descricao_servico"),//vem do banco
+                        result.getString("data_servico"),
+                        result.getString("hora_servico")
+                );
+
+                System.out.println("Número do atendimento: " + result.getInt("numero_serviços"));//do banco
+                System.out.println("Descrição do trabalho: " + servicoTemp.getDescricao_servico());//do objeto
+                System.out.println("Data: " + servicoTemp.getData());
+                System.out.println("Horário: " + servicoTemp.getHora());
+
+                System.out.println("-------------------------------");
+                servicos.add(servicoTemp);
+            }
+        }catch(SQLException e){
+            System.out.println("Erro de operação: " + e.getMessage());
+        }
+        finally {
+            try{
+                connection.close();
+                statement.close();
+                result.close();
+            }
+            catch (SQLException e){
+                System.out.println("Erro ao fechar a conexão: " + e.getMessage());
+            }
+        }
+        return servicos;
+    }
 }
